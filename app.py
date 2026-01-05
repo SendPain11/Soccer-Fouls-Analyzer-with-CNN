@@ -197,26 +197,36 @@ LABELS = [
 @st.cache_resource
 def load_keras_model():
     try:
-        custom_objects = {}
-        model = load_model("fould-classification-resnet101v2.h5", custom_objects=custom_objects, compile=False)
+        model_path = "models/fould-classification-resnet101v2.h5"
+        model = load_model(model_path, compile=False)
         return model
     except Exception as e:
         st.error(f"Failed to load TensorFlow model: {e}")
         return None
 
+
 # Cache PyTorch model loading
 @st.cache_resource
 def load_pytorch_model():
     try:
+        model_path = "models/best_model.pth"
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model = timm.create_model('mobilenetv4_conv_aa_large.e230_r448_in12k_ft_in1k', pretrained=False, num_classes=len(LABELS))
-        model.load_state_dict(torch.load("best_model.pth", map_location=device))
-        model.eval()
+
+        model = timm.create_model(
+            'mobilenetv4_conv_aa_large.e230_r448_in12k_ft_in1k',
+            pretrained=False,
+            num_classes=len(LABELS)
+        )
+
+        model.load_state_dict(torch.load(model_path, map_location=device))
         model.to(device)
+        model.eval()
+
         return model, device
     except Exception as e:
         st.error(f"Failed to load PyTorch model: {e}")
         return None, None
+
 
 def preprocess_image_tensorflow(img_data):
     img = Image.open(io.BytesIO(img_data))
