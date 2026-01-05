@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klasifikasi Pelanggaran Sepak Bola</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 0 0 50px 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .header .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .nav-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+
+        .nav-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2a5298;
+            padding: 8px 16px;
+            border-radius: 25px;
+            background: #f0f4ff;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: #2a5298;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #2a5298;
+        }
+
+        .section-header i {
+            font-size: 2rem;
+            color: #2a5298;
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #1e3c72;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #2a5298;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(42, 82, 152, 0.2);
+        }
+
+        .card h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* Code Block - FIXED */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        .code-block .number {
+            color: #b5cea8;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #1976d2;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box.warning {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left-color: #ff9800;
+        }
+
+        .info-box.success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left-color: #4caf50;
+        }
+
+        .info-box h4 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+
+        tr:hover {
+            background: #e8ecff;
+        }
+
+        .architecture {
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .architecture-flow {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .arch-box {
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-weight: 500;
+            min-width: 150px;
+            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.3);
+        }
+
+        .arch-arrow {
+            font-size: 2rem;
+            color: #2a5298;
+        }
+
+        .step-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            position: relative;
+            padding-left: 70px;
+            margin-bottom: 25px;
+        }
+
+        .step-list li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.3);
+        }
+
+        .step-list li h4 {
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge-primary {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .badge-warning {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .badge-danger {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 50px 50px 0 0;
+            margin-top: 50px;
+        }
+
+        .footer p {
+            opacity: 0.9;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .accordion {
+            margin: 20px 0;
+        }
+
+        .accordion-item {
+            background: #f8f9ff;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #e8ecff 0%, #f0f4ff 100%);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1e3c72;
+        }
+
+        .accordion-header:hover {
+            background: #e0e7ff;
+        }
+
+        .accordion-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .accordion-item.active .accordion-content {
+            display: block;
+        }
+
+        .accordion-item.active .accordion-header i {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+        .header h1 {
+        font-size: 2rem;
+            }
+        }
+
+        .section {
+            padding: 25px;
+        }
+
+        .architecture-flow {
+            flex-direction: column;
+        }
+
+        .arch-arrow {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="icon">⚽</div>
+        <h1>Klasifikasi Pelanggaran Sepak Bola</h1>
+        <p>Dokumentasi lengkap sistem klasifikasi pelanggaran sepak bola menggunakan Deep Learning dengan implementasi
+            Web Application berbasis Streamlit</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Navigation -->
+        <nav class="nav-container">
+            <div class="nav-title">
+                <i class="fas fa-list"></i>
+                Daftar Isi
+            </div>
+            <div class="nav-links">
+                <a href="#overview"><i class="fas fa-eye"></i> Overview</a>
+                <a href="#dataset"><i class="fas fa-database"></i> Dataset</a>
+                <a href="#preprocessing"><i class="fas fa-cogs"></i> Preprocessing</a>
+                <a href="#arsitektur"><i class="fas fa-project-diagram"></i> Arsitektur Model</a>
+                <a href="#training"><i class="fas fa-brain"></i> Training</a>
+                <a href="#evaluasi"><i class="fas fa-chart-bar"></i> Evaluasi</a>
+                <a href="#streamlit"><i class="fas fa-globe"></i> Implementasi Streamlit</a>
+                <a href="#penggunaan"><i class="fas fa-play-circle"></i> Cara Penggunaan</a>
+                <a href="#kesimpulan"><i class="fas fa-check-circle"></i> Kesimpulan</a>
+            </div>
+        </nav>
+
+        <!-- Section 1: Overview -->
+        <section id="overview" class="section">
+            <div class="section-header">
+                <i class="fas fa-eye"></i>
+                <h2>1. Overview Project</h2>
+            </div>
+
+            <p>
+                <strong>Soccer Fouls Analyzer</strong> adalah sistem berbasis kecerdasan buatan (AI) yang mampu
+                menganalisis
+                dan mengklasifikasikan jenis pelanggaran dalam pertandingan sepak bola secara otomatis dan berkonsentrasi pada 2 jenis pelanggaran yaitu tackle dan handball. Sistem ini
+                dikembangkan
+                menggunakan teknologi <span class="highlight">Deep Learning</span> dengan arsitektur
+                <strong>Convolutional Neural Network (CNN)</strong>
+                yang telah terbukti sangat efektif dalam pengenalan dan klasifikasi gambar.
+            </p>
+
+            <div class="info-box">
+                <h4><i class="fas fa-lightbulb"></i> Tujuan Project</h4>
+                <p>
+                    Membantu wasit dan official pertandingan dalam mengambil keputusan yang lebih akurat terkait
+                    pelanggaran yang terjadi di lapangan dengan memanfaatkan teknologi Video Assistant Referee (VAR)
+                    yang terintegrasi dengan sistem AI.
+                </p>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Kategori Klasifikasi</h3>
+            <p>Sistem ini mampu mengklasifikasikan pelanggaran ke dalam 5 kategori utama:</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3><span style="font-size: 1.5rem;">🟥</span> Handball Sengaja</h3>
+                    <p>Pelanggaran handball yang dilakukan dengan kesengajaan. Biasanya mengakibatkan <strong>kartu
+                            merah</strong> dan/atau tendangan penalti.</p>
+                </div>
+                <div class="card">
+                    <h3><span style="font-size: 1.5rem;">🟨</span> Handball Tidak Sengaja</h3>
+                    <p>Handball yang terjadi secara tidak disengaja, namun tetap dianggap pelanggaran. Biasanya
+                        mengakibatkan <strong>kartu kuning</strong>.</p>
+                </div>
+                <div class="card">
+                    <h3><span style="font-size: 1.5rem;">🟢</span> Tackle Bersih</h3>
+                    <p>Tackle yang dilakukan dengan teknik yang benar dan tidak membahayakan lawan. <strong>Tidak ada
+                            kartu</strong> yang diberikan.</p>
+                </div>
+                <div class="card">
+                    <h3><span style="font-size: 1.5rem;">🟥</span> Tackle Keras</h3>
+                    <p>Tackle yang dilakukan dengan intensitas tinggi dan berpotensi melukai lawan. Biasanya
+                        mengakibatkan <strong>kartu merah</strong>.</p>
+                </div>
+                <div class="card">
+                    <h3><span style="font-size: 1.5rem;">🟨</span> Tackle Ringan</h3>
+                    <p>Tackle yang termasuk pelanggaran ringan namun tidak membahayakan. Biasanya mengakibatkan
+                        <strong>kartu kuning</strong>.</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px 0; color: #1e3c72;">Teknologi yang Digunakan</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Teknologi</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Framework Deep Learning</strong></td>
+                            <td>TensorFlow/Keras, PyTorch</td>
+                            <td>Framework utama untuk membangun dan melatih model CNN</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Arsitektur Model</strong></td>
+                            <td>ResNet101V2, MobileNetV4</td>
+                            <td>Pre-trained model yang digunakan dengan teknik Transfer Learning</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Web Framework</strong></td>
+                            <td>Streamlit</td>
+                            <td>Framework untuk membangun aplikasi web interaktif</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Image Processing</strong></td>
+                            <td>Pillow, OpenCV</td>
+                            <td>Library untuk preprocessing dan manipulasi gambar</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Data Analysis</strong></td>
+                            <td>NumPy, Pandas, Matplotlib</td>
+                            <td>Library untuk analisis data dan visualisasi</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Report Generation</strong></td>
+                            <td>ReportLab</td>
+                            <td>Library untuk generate laporan PDF</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 2: Dataset -->
+        <section id="dataset" class="section">
+            <div class="section-header">
+                <i class="fas fa-database"></i>
+                <h2>2. Dataset</h2>
+            </div>
+
+            <p>
+                Dataset yang digunakan dalam project ini adalah kumpulan gambar pelanggaran sepak bola yang telah
+                dikurasi dan dilabeli secara manual. Dataset ini berisi berbagai situasi pelanggaran yang sering
+                terjadi dalam pertandingan sepak bola profesional.
+            </p>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Struktur Dataset</h3>
+
+            <div class="code-block"><span class="comment"># Struktur folder dataset</span>
+                VAR/
+                ├── Handball Sengaja/ <span class="comment"># Gambar handball yang disengaja</span>
+                ├── Handball Tidak Sengaja/ <span class="comment"># Gambar handball tidak disengaja</span>
+                ├── Tackle Bersih/ <span class="comment"># Gambar tackle yang bersih</span>
+                ├── Tackle Keras/ <span class="comment"># Gambar tackle keras/berbahaya</span>
+                └── Tackle Ringan/ <span class="comment"># Gambar tackle ringan</span></div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Pembagian Dataset (Data Splitting)</h3>
+
+            <p>
+                Dataset dibagi menjadi 3 bagian untuk proses training, validasi, dan testing dengan proporsi sebagai
+                berikut:
+            </p>
+
+            <div class="architecture">
+                <div class="architecture-flow">
+                    <div class="arch-box">
+                        <i class="fas fa-database"></i><br>
+                        <strong>Dataset Original</strong><br>
+                        100%
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);">
+                        <i class="fas fa-book"></i><br>
+                        <strong>Training Set</strong><br>
+                        90%
+                    </div>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);">
+                        <i class="fas fa-clipboard-check"></i><br>
+                        <strong>Validation Set</strong><br>
+                        5%
+                    </div>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);">
+                        <i class="fas fa-vial"></i><br>
+                        <strong>Test Set</strong><br>
+                        5%
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box success">
+                <h4><i class="fas fa-check-circle"></i> Hasil Splitting</h4>
+                <p>
+                    Dataset berhasil di-split ke folder <code>splitted_dataset</code> dengan struktur:
+                    <strong>90% Training, 5% Validation, 5% Test</strong>
+                </p>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Kode Splitting Dataset</h3>
+
+            <div class="code-block"><span class="keyword">import</span> os
+                <span class="keyword">import</span> shutil
+                <span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span>
+                train_test_split
+
+                dataset_dir = <span class="string">'VAR'</span>
+                output_dir = <span class="string">'splitted_dataset'</span>
+                classes = os.<span class="function">listdir</span>(dataset_dir)
+
+                <span class="comment"># Buat folder untuk setiap split</span>
+                <span class="keyword">for</span> folder <span class="keyword">in</span> [<span
+                    class="string">'train'</span>, <span class="string">'val'</span>, <span
+                    class="string">'test'</span>]:
+                <span class="keyword">for</span> class_name <span class="keyword">in</span> classes:
+                os.<span class="function">makedirs</span>(os.path.<span class="function">join</span>(output_dir, folder,
+                class_name), exist_ok=<span class="keyword">True</span>)
+
+                <span class="keyword">for</span> class_name <span class="keyword">in</span> classes:
+                class_path = os.path.<span class="function">join</span>(dataset_dir, class_name)
+                images = os.<span class="function">listdir</span>(class_path)
+
+                <span class="comment"># 90% train, 10% sisa (test+val)</span>
+                train, test_val = <span class="function">train_test_split</span>(images, test_size=<span
+                    class="number">0.10</span>, random_state=<span class="number">42</span>)
+
+                <span class="comment"># Bagi sisa jadi 50:50 → 5% val, 5% test</span>
+                val, test = <span class="function">train_test_split</span>(test_val, test_size=<span
+                    class="number">0.5</span>, random_state=<span class="number">42</span>)
+
+                <span class="comment"># Copy file ke folder masing-masing</span>
+                <span class="keyword">for</span> img <span class="keyword">in</span> train:
+                shutil.<span class="function">copy</span>(os.path.<span class="function">join</span>(class_path, img),
+                os.path.<span class="function">join</span>(output_dir, <span class="string">'train'</span>, class_name))
+                <span class="keyword">for</span> img <span class="keyword">in</span> val:
+                shutil.<span class="function">copy</span>(os.path.<span class="function">join</span>(class_path, img),
+                os.path.<span class="function">join</span>(output_dir, <span class="string">'val'</span>, class_name))
+                <span class="keyword">for</span> img <span class="keyword">in</span> test:
+                shutil.<span class="function">copy</span>(os.path.<span class="function">join</span>(class_path, img),
+                os.path.<span class="function">join</span>(output_dir, <span class="string">'test'</span>, class_name))
+
+                <span class="function">print</span>(<span class="string">"✅ Dataset berhasil di-split!"</span>)</div>
+        </section>
+
+        <!-- Section 3: Preprocessing -->
+        <section id="preprocessing" class="section">
+            <div class="section-header">
+                <i class="fas fa-cogs"></i>
+                <h2>3. Data Preprocessing & Augmentasi</h2>
+            </div>
+
+            <p>
+                Preprocessing data adalah tahap penting dalam mempersiapkan gambar sebelum dimasukkan ke dalam model.
+                Selain itu, augmentasi data digunakan untuk meningkatkan variasi dataset dan mencegah overfitting.
+            </p>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Teknik Augmentasi yang Digunakan</h3>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3><i class="fas fa-sync-alt" style="color: #2a5298;"></i> Rotation</h3>
+                    <p>Rotasi gambar hingga <strong>±10°</strong> untuk memberikan variasi sudut pandang.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-expand-arrows-alt" style="color: #2a5298;"></i> Shear</h3>
+                    <p>Transformasi shear dengan range <strong>0.2</strong> untuk distorsi perspektif.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-search-plus" style="color: #2a5298;"></i> Zoom</h3>
+                    <p>Zoom in/out dengan range <strong>0.2</strong> untuk variasi skala objek.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-sun" style="color: #2a5298;"></i> Brightness</h3>
+                    <p>Variasi kecerahan dengan range <strong>[0.4, 1.5]</strong> untuk kondisi pencahayaan berbeda.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-arrows-alt-h" style="color: #2a5298;"></i> Width/Height Shift</h3>
+                    <p>Pergeseran horizontal dan vertikal sebesar <strong>10%</strong> dari dimensi gambar.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-exchange-alt" style="color: #2a5298;"></i> Horizontal Flip</h3>
+                    <p>Pencerminan horizontal untuk menambah variasi orientasi.</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Kode Augmentasi Data</h3>
+
+            <div class="code-block"><span class="keyword">from</span> tensorflow.keras.preprocessing.image <span
+                    class="keyword">import</span> ImageDataGenerator
+
+                <span class="comment"># Augmentasi untuk data training</span>
+                train_datagen = <span class="function">ImageDataGenerator</span>(
+                rescale=<span class="number">1.0/255</span>, <span class="comment"># Normalisasi pixel ke range [0,
+                    1]</span>
+                rotation_range=<span class="number">10</span>, <span class="comment"># Rotasi ±10 derajat</span>
+                shear_range=<span class="number">0.2</span>, <span class="comment"># Transformasi shear</span>
+                zoom_range=<span class="number">0.2</span>, <span class="comment"># Zoom in/out</span>
+                brightness_range=[<span class="number">0.4</span>, <span class="number">1.5</span>], <span
+                    class="comment"># Variasi kecerahan</span>
+                width_shift_range=<span class="number">0.1</span>, <span class="comment"># Pergeseran horizontal</span>
+                height_shift_range=<span class="number">0.1</span>, <span class="comment"># Pergeseran vertikal</span>
+                horizontal_flip=<span class="keyword">True</span> <span class="comment"># Flip horizontal</span>
+                )
+
+                <span class="comment"># Untuk validation dan test, hanya normalisasi (tanpa augmentasi)</span>
+                val_test_datagen = <span class="function">ImageDataGenerator</span>(rescale=<span
+                    class="number">1.0/255</span>)</div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Loading Dataset dengan Generator</h3>
+
+            <div class="code-block">batch_size = <span class="number">32</span>
+
+                <span class="comment"># Training generator dengan augmentasi</span>
+                train_generator = train_datagen.<span class="function">flow_from_directory</span>(
+                train_path,
+                target_size=(<span class="number">224</span>, <span class="number">224</span>), <span class="comment">#
+                    Resize ke 224x224 pixel</span>
+                batch_size=batch_size,
+                class_mode=<span class="string">"categorical"</span> <span class="comment"># Multi-class
+                    classification</span>
+                )
+
+                <span class="comment"># Validation generator</span>
+                val_generator = val_test_datagen.<span class="function">flow_from_directory</span>(
+                val_path,
+                target_size=(<span class="number">224</span>, <span class="number">224</span>),
+                batch_size=batch_size,
+                class_mode=<span class="string">"categorical"</span>
+                )
+
+                <span class="comment"># Test generator</span>
+                test_generator = val_test_datagen.<span class="function">flow_from_directory</span>(
+                test_path,
+                target_size=(<span class="number">224</span>, <span class="number">224</span>),
+                batch_size=batch_size,
+                class_mode=<span class="string">"categorical"</span>,
+                shuffle=<span class="keyword">False</span> <span class="comment"># Tidak shuffle untuk evaluasi</span>
+                )</div>
+
+            <div class="info-box">
+                <h4><i class="fas fa-info-circle"></i> Catatan Penting</h4>
+                <ul>
+                    <li>Semua gambar di-resize ke ukuran <strong>224 × 224 pixel</strong> sesuai dengan input size model
+                    </li>
+                    <li>Nilai pixel dinormalisasi dari range [0, 255] ke [0, 1] dengan membagi 255</li>
+                    <li>Augmentasi hanya diterapkan pada <strong>data training</strong>, bukan validation/test</li>
+                    <li>Class mode <code>categorical</code> digunakan untuk multi-class classification dengan one-hot
+                        encoding</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 4: Arsitektur Model -->
+        <section id="arsitektur" class="section">
+            <div class="section-header">
+                <i class="fas fa-project-diagram"></i>
+                <h2>4. Arsitektur Model</h2>
+            </div>
+
+            <p>
+                Project ini menggunakan teknik <strong>Transfer Learning</strong> dengan memanfaatkan model pre-trained
+                yang sudah dilatih pada dataset ImageNet. Dua arsitektur model yang digunakan adalah:
+            </p>
+
+            <div class="card-grid" style="margin-top: 25px;">
+                <div class="card" style="border-left-color: #4caf50;">
+                    <h3><i class="fas fa-network-wired" style="color: #4caf50;"></i> ResNet101V2</h3>
+                    <p><span class="badge badge-success">TensorFlow/Keras</span></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>101 layer deep residual network</li>
+                        <li>Pre-trained on ImageNet</li>
+                        <li>Menggunakan skip connections</li>
+                        <li>Excellent feature extraction</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-left-color: #ff9800;">
+                    <h3><i class="fas fa-mobile-alt" style="color: #ff9800;"></i> MobileNetV4</h3>
+                    <p><span class="badge badge-warning">PyTorch</span></p>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Lightweight architecture</li>
+                        <li>Optimized for mobile/edge devices</li>
+                        <li>Fast inference time</li>
+                        <li>Good accuracy-efficiency trade-off</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px 0; color: #1e3c72;">Arsitektur ResNet101V2 (Detail)</h3>
+
+            <div class="architecture">
+                <h4 style="margin-bottom: 20px;">Flow Arsitektur Model</h4>
+                <div class="architecture-flow">
+                    <div class="arch-box">
+                        <strong>Input</strong><br>
+                        224×224×3
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);">
+                        <strong>ResNet101V2</strong><br>
+                        Base Model<br>
+                        (Frozen)
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);">
+                        <strong>GlobalAvgPool2D</strong><br>
+                        Feature Vector
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);">
+                        <strong>Dense 256</strong><br>
+                        ReLU
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);">
+                        <strong>Dense 5</strong><br>
+                        Softmax
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Kode Pembuatan Model</h3>
+
+            <div class="code-block"><span class="keyword">from</span> tensorflow.keras.models <span
+                    class="keyword">import</span> Sequential
+                <span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense,
+                GlobalAveragePooling2D
+                <span class="keyword">from</span> tensorflow.keras.applications <span class="keyword">import</span>
+                ResNet101V2
+
+                <span class="comment"># Load pre-trained ResNet101V2 tanpa top layer</span>
+                base_model = <span class="function">ResNet101V2</span>(
+                weights=<span class="string">'imagenet'</span>, <span class="comment"># Pre-trained weights dari
+                    ImageNet</span>
+                include_top=<span class="keyword">False</span>, <span class="comment"># Tidak include fully connected
+                    layers</span>
+                input_shape=(<span class="number">224</span>, <span class="number">224</span>, <span
+                    class="number">3</span>) <span class="comment"># Input shape gambar</span>
+                )
+
+                <span class="comment"># Freeze base model (tidak ditraining ulang)</span>
+                base_model.trainable = <span class="keyword">False</span>
+
+                <span class="comment"># Buat model Sequential</span>
+                model = <span class="function">Sequential</span>([
+                base_model, <span class="comment"># Feature extractor</span>
+                <span class="function">GlobalAveragePooling2D</span>(), <span class="comment"># Pooling layer</span>
+                <span class="function">Dense</span>(<span class="number">256</span>, activation=<span
+                    class="string">'relu'</span>), <span class="comment"># Hidden layer</span>
+                <span class="function">Dense</span>(<span class="number">5</span>, activation=<span
+                    class="string">'softmax'</span>) <span class="comment"># Output layer (5 classes)</span>
+                ])</div>
+
+            <div class="info-box warning">
+                <h4><i class="fas fa-exclamation-triangle"></i> Transfer Learning</h4>
+                <p>
+                    Dengan membekukan (freeze) base model, kita hanya melatih layer classifier yang baru ditambahkan.
+                    Ini mempercepat training dan mencegah overfitting karena dataset yang relatif kecil.
+                </p>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Kompilasi Model</h3>
+
+            <div class="code-block"><span class="comment"># Compile model dengan optimizer Adam</span>
+                model.<span class="function">compile</span>(
+                loss=<span class="string">'categorical_crossentropy'</span>, <span class="comment"># Loss function untuk
+                    multi-class</span>
+                optimizer=tf.keras.optimizers.<span class="function">Adam</span>(learning_rate=<span
+                    class="number">0.001</span>),
+                metrics=[<span class="string">'accuracy'</span>] <span class="comment"># Metrik evaluasi</span>
+                )</div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Nilai</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Loss Function</strong></td>
+                            <td>Categorical Crossentropy</td>
+                            <td>Standar untuk multi-class classification dengan one-hot encoding</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Optimizer</strong></td>
+                            <td>Adam</td>
+                            <td>Adaptive learning rate optimizer yang efisien</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Learning Rate</strong></td>
+                            <td>0.001</td>
+                            <td>Default learning rate untuk Adam optimizer</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Metrics</strong></td>
+                            <td>Accuracy</td>
+                            <td>Persentase prediksi yang benar</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 5: Training -->
+        <section id="training" class="section">
+            <div class="section-header">
+                <i class="fas fa-brain"></i>
+                <h2>5. Training Model</h2>
+            </div>
+
+            <p>
+                Proses training dilakukan untuk melatih model agar dapat mengenali pola-pola pelanggaran
+                dari gambar yang diberikan. Berikut adalah parameter dan konfigurasi training yang digunakan.
+            </p>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Parameter Training</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Nilai</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Epochs</strong></td>
+                            <td>25</td>
+                            <td>Jumlah iterasi penuh melalui seluruh dataset training</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Batch Size</strong></td>
+                            <td>32</td>
+                            <td>Jumlah sampel yang diproses sebelum update parameter</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Learning Rate</strong></td>
+                            <td>0.001</td>
+                            <td>Kecepatan pembelajaran model</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Optimizer</strong></td>
+                            <td>Adam</td>
+                            <td>Algoritma optimasi adaptif</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Input Size</strong></td>
+                            <td>224 × 224 × 3</td>
+                            <td>Dimensi gambar input (Height × Width × Channels)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Kode Training</h3>
+
+            <div class="code-block"><span class="comment"># Training Model</span>
+                history = model.<span class="function">fit</span>(
+                train_generator, <span class="comment"># Data training dengan augmentasi</span>
+                steps_per_epoch=<span class="function">len</span>(train_generator), <span class="comment"># Jumlah batch
+                    per epoch</span>
+                epochs=<span class="number">25</span>, <span class="comment"># Jumlah epoch</span>
+                validation_data=val_generator, <span class="comment"># Data validasi</span>
+                validation_steps=<span class="function">len</span>(val_generator), <span class="comment"># Steps
+                    validasi per epoch</span>
+                )
+
+                <span class="comment"># Evaluasi pada test set</span>
+                test_loss, test_acc = model.<span class="function">evaluate</span>(test_generator)
+                <span class="function">print</span>(<span class="string">f"Test Accuracy: {test_acc * 100:.2f}%"</span>)
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Proses Training</h3>
+
+            <ul class="step-list">
+                <li>
+                    <h4>Forward Propagation</h4>
+                    <p>Input gambar dilewatkan melalui network untuk menghasilkan prediksi. Feature extraction dilakukan
+                        oleh ResNet101V2 base model.</p>
+                </li>
+                <li>
+                    <h4>Loss Calculation</h4>
+                    <p>Categorical crossentropy loss dihitung dengan membandingkan prediksi dengan label sebenarnya
+                        menggunakan one-hot encoding.</p>
+                </li>
+                <li>
+                    <h4>Backward Propagation</h4>
+                    <p>Gradien loss dihitung untuk setiap parameter yang trainable (hanya classifier layers karena base
+                        model difreeze).</p>
+                </li>
+                <li>
+                    <h4>Parameter Update</h4>
+                    <p>Adam optimizer mengupdate weights berdasarkan gradien dengan adaptive learning rate per
+                        parameter.</p>
+                </li>
+                <li>
+                    <h4>Validation</h4>
+                    <p>Setiap akhir epoch, model dievaluasi pada validation set untuk memonitor generalisasi dan
+                        mendeteksi overfitting.</p>
+                </li>
+            </ul>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Menyimpan Model</h3>
+
+            <div class="code-block"><span class="comment"># Simpan model dalam format Keras dan H5</span>
+                model.<span class="function">save</span>(<span
+                    class="string">"fould-classification-resnet101v2.keras"</span>)
+                model.<span class="function">save</span>(<span
+                    class="string">"fould-classification-resnet101v2.h5"</span>)</div>
+
+            <div class="info-box success">
+                <h4><i class="fas fa-save"></i> Format Model yang Disimpan</h4>
+                <ul>
+                    <li><strong>.keras</strong> - Format native Keras (recommended untuk Keras 3.x)</li>
+                    <li><strong>.h5</strong> - Format HDF5 untuk kompatibilitas dengan Keras 2.x dan deployment</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 6: Evaluasi -->
+        <section id="evaluasi" class="section">
+            <div class="section-header">
+                <i class="fas fa-chart-bar"></i>
+                <h2>6. Evaluasi Model</h2>
+            </div>
+
+            <p>
+                Evaluasi model dilakukan untuk mengukur performa model pada data yang belum pernah dilihat sebelumnya
+                (test set).
+                Berbagai metrik evaluasi digunakan untuk memberikan gambaran komprehensif tentang kemampuan model.
+            </p>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Metrik Evaluasi</h3>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3><i class="fas fa-bullseye" style="color: #4caf50;"></i> Accuracy</h3>
+                    <p>Persentase prediksi yang benar dari total prediksi. Mengukur performa keseluruhan model.</p>
+                    <div
+                        style="margin-top: 10px; font-family: monospace; background: #f5f5f5; padding: 10px; border-radius: 5px;">
+                        Accuracy = (TP + TN) / Total
+                    </div>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-crosshairs" style="color: #2196f3;"></i> Precision</h3>
+                    <p>Dari semua prediksi positif, berapa yang benar-benar positif. Penting untuk menghindari false
+                        positive.</p>
+                    <div
+                        style="margin-top: 10px; font-family: monospace; background: #f5f5f5; padding: 10px; border-radius: 5px;">
+                        Precision = TP / (TP + FP)
+                    </div>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-search" style="color: #ff9800;"></i> Recall</h3>
+                    <p>Dari semua data positif sebenarnya, berapa yang berhasil diprediksi positif. Penting untuk
+                        menghindari false negative.</p>
+                    <div
+                        style="margin-top: 10px; font-family: monospace; background: #f5f5f5; padding: 10px; border-radius: 5px;">
+                        Recall = TP / (TP + FN)
+                    </div>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-balance-scale" style="color: #9c27b0;"></i> F1-Score</h3>
+                    <p>Harmonic mean dari Precision dan Recall. Memberikan keseimbangan antara kedua metrik.</p>
+                    <div
+                        style="margin-top: 10px; font-family: monospace; background: #f5f5f5; padding: 10px; border-radius: 5px;">
+                        F1 = 2 × (P × R) / (P + R)
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px 0; color: #1e3c72;">Confusion Matrix</h3>
+
+            <p>
+                Confusion Matrix adalah tabel yang menggambarkan performa model klasifikasi dengan menunjukkan
+                jumlah prediksi benar dan salah untuk setiap kelas.
+            </p>
+
+            <div class="code-block"><span class="keyword">from</span> sklearn.metrics <span
+                    class="keyword">import</span> confusion_matrix, classification_report
+                <span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+                <span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+                <span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+                <span class="comment"># Prediksi pada test set</span>
+                Y_pred = model.<span class="function">predict</span>(test_generator)
+                y_pred = np.<span class="function">argmax</span>(Y_pred, axis=<span class="number">1</span>)
+
+                <span class="comment"># Ambil true labels dan class names</span>
+                true_classes = test_generator.classes
+                class_labels = <span class="function">list</span>(test_generator.class_indices.<span
+                    class="function">keys</span>())
+
+                <span class="comment"># Buat confusion matrix</span>
+                conf_matrix = <span class="function">confusion_matrix</span>(true_classes, y_pred)
+
+                <span class="comment"># Visualisasi dengan heatmap</span>
+                plt.<span class="function">figure</span>(figsize=(<span class="number">12</span>, <span
+                    class="number">10</span>))
+                sns.<span class="function">heatmap</span>(conf_matrix, annot=<span class="keyword">True</span>,
+                fmt=<span class="string">'d'</span>, cmap=<span class="string">'Blues'</span>,
+                xticklabels=class_labels, yticklabels=class_labels)
+                plt.<span class="function">title</span>(<span class="string">'Confusion Matrix'</span>)
+                plt.<span class="function">xlabel</span>(<span class="string">'Predicted'</span>)
+                plt.<span class="function">ylabel</span>(<span class="string">'Actual'</span>)
+                plt.<span class="function">show</span>()</div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Komponen Confusion Matrix</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Komponen</th>
+                            <th>Nama</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TP</strong></td>
+                            <td>True Positive</td>
+                            <td>Prediksi positif yang benar (model memprediksi kelas X dan memang kelas X)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TN</strong></td>
+                            <td>True Negative</td>
+                            <td>Prediksi negatif yang benar (model memprediksi bukan kelas X dan memang bukan)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FP</strong></td>
+                            <td>False Positive</td>
+                            <td>Prediksi positif yang salah (model memprediksi kelas X tapi sebenarnya bukan)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FN</strong></td>
+                            <td>False Negative</td>
+                            <td>Prediksi negatif yang salah (model memprediksi bukan kelas X tapi sebenarnya kelas X)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Kode Menghitung TP, TN, FP, FN</h3>
+
+            <div class="code-block">num_classes = <span class="function">len</span>(class_labels)
+                total_samples = np.<span class="function">sum</span>(conf_matrix)
+
+                TP_list, FN_list, FP_list, TN_list = [], [], [], []
+
+                <span class="keyword">for</span> i <span class="keyword">in</span> <span
+                    class="function">range</span>(num_classes):
+                TP = conf_matrix[i, i] <span class="comment"># Diagonal element</span>
+                FN = np.<span class="function">sum</span>(conf_matrix[i, :]) - TP <span class="comment"># Row sum -
+                    TP</span>
+                FP = np.<span class="function">sum</span>(conf_matrix[:, i]) - TP <span class="comment"># Column sum -
+                    TP</span>
+                TN = total_samples - (TP + FP + FN) <span class="comment"># Remaining</span>
+
+                TP_list.<span class="function">append</span>(TP)
+                FN_list.<span class="function">append</span>(FN)
+                FP_list.<span class="function">append</span>(FP)
+                TN_list.<span class="function">append</span>(TN)
+
+                <span class="comment"># Hitung Precision, Recall, F1-Score</span>
+                precision_list = [TP / (TP + FP) <span class="keyword">if</span> (TP + FP) != <span
+                    class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
+                <span class="keyword">for</span> TP, FP <span class="keyword">in</span> <span
+                    class="function">zip</span>(TP_list, FP_list)]
+                recall_list = [TP / (TP + FN) <span class="keyword">if</span> (TP + FN) != <span class="number">0</span>
+                <span class="keyword">else</span> <span class="number">0</span>
+                <span class="keyword">for</span> TP, FN <span class="keyword">in</span> <span
+                    class="function">zip</span>(TP_list, FN_list)]
+                f1_score_list = [<span class="number">2</span> * (p * r) / (p + r) <span class="keyword">if</span> (p +
+                r) != <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
+                <span class="keyword">for</span> p, r <span class="keyword">in</span> <span
+                    class="function">zip</span>(precision_list, recall_list)]</div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Visualisasi Training History</h3>
+
+            <div class="code-block"><span class="comment"># Plot Akurasi Training vs Validation</span>
+                plt.<span class="function">figure</span>(figsize=(<span class="number">12</span>, <span
+                    class="number">5</span>))
+
+                plt.<span class="function">subplot</span>(<span class="number">1</span>, <span class="number">2</span>,
+                <span class="number">1</span>)
+                plt.<span class="function">plot</span>(history.history[<span class="string">'accuracy'</span>],
+                label=<span class="string">'Train Accuracy'</span>)
+                plt.<span class="function">plot</span>(history.history[<span class="string">'val_accuracy'</span>],
+                label=<span class="string">'Validation Accuracy'</span>)
+                plt.<span class="function">title</span>(<span class="string">'Model Accuracy'</span>)
+                plt.<span class="function">xlabel</span>(<span class="string">'Epoch'</span>)
+                plt.<span class="function">ylabel</span>(<span class="string">'Accuracy'</span>)
+                plt.<span class="function">legend</span>()
+
+                <span class="comment"># Plot Loss Training vs Validation</span>
+                plt.<span class="function">subplot</span>(<span class="number">1</span>, <span class="number">2</span>,
+                <span class="number">2</span>)
+                plt.<span class="function">plot</span>(history.history[<span class="string">'loss'</span>], label=<span
+                    class="string">'Train Loss'</span>)
+                plt.<span class="function">plot</span>(history.history[<span class="string">'val_loss'</span>],
+                label=<span class="string">'Validation Loss'</span>)
+                plt.<span class="function">title</span>(<span class="string">'Model Loss'</span>)
+                plt.<span class="function">xlabel</span>(<span class="string">'Epoch'</span>)
+                plt.<span class="function">ylabel</span>(<span class="string">'Loss'</span>)
+                plt.<span class="function">legend</span>()
+
+                plt.<span class="function">tight_layout</span>()
+                plt.<span class="function">show</span>()</div>
+
+            <div class="info-box">
+                <h4><i class="fas fa-chart-line"></i> Interpretasi Grafik</h4>
+                <ul>
+                    <li><strong>Accuracy meningkat & Loss menurun</strong> - Model belajar dengan baik</li>
+                    <li><strong>Gap kecil antara train dan validation</strong> - Tidak terjadi overfitting</li>
+                    <li><strong>Kurva stabil di akhir</strong> - Model sudah konvergen</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 7: Implementasi Streamlit -->
+        <section id="streamlit" class="section">
+            <div class="section-header">
+                <i class="fas fa-globe"></i>
+                <h2>7. Implementasi Streamlit</h2>
+            </div>
+
+            <p>
+                <strong>Streamlit</strong> adalah framework Python open-source yang memungkinkan pembuatan aplikasi web 
+                interaktif untuk machine learning dan data science dengan cepat dan mudah. Dalam project ini, 
+                Streamlit digunakan untuk membuat interface yang user-friendly untuk melakukan prediksi pelanggaran sepak bola.
+            </p>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Arsitektur Aplikasi Streamlit</h3>
+
+            <div class="architecture">
+                <div class="architecture-flow">
+                    <div class="arch-box">
+                        <i class="fas fa-user"></i><br>
+                        <strong>User</strong><br>
+                        Upload Image
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #ff6f61 0%, #de6262 100%);">
+                        <i class="fas fa-code"></i><br>
+                        <strong>Streamlit</strong><br>
+                        Web Interface
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);">
+                        <i class="fas fa-image"></i><br>
+                        <strong>Preprocessing</strong><br>
+                        Resize & Normalize
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);">
+                        <i class="fas fa-brain"></i><br>
+                        <strong>Model</strong><br>
+                        ResNet / MobileNet
+                    </div>
+                    <span class="arch-arrow">→</span>
+                    <div class="arch-box" style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);">
+                        <i class="fas fa-chart-pie"></i><br>
+                        <strong>Result</strong><br>
+                        Prediction & Card
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Fitur Utama Aplikasi</h3>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3><i class="fas fa-robot" style="color: #2a5298;"></i> Multi-Model Support</h3>
+                    <p>Mendukung 2 model: <strong>ResNet101V2</strong> (TensorFlow) dan <strong>MobileNetV4</strong> (PyTorch) yang dapat dipilih user.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-upload" style="color: #2a5298;"></i> Image Upload</h3>
+                    <p>User dapat upload gambar tackle dalam format <strong>JPG, JPEG, atau PNG</strong> untuk dianalisis.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-tachometer-alt" style="color: #2a5298;"></i> Confidence Score</h3>
+                    <p>Menampilkan <strong>confidence score</strong> dalam bentuk persentase dan progress bar visual.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-id-card" style="color: #2a5298;"></i> Card Recommendation</h3>
+                    <p>Sistem memberikan rekomendasi kartu (<span style="color: red;">🟥 Merah</span>, <span style="color: #c7a600;">🟨 Kuning</span>, atau <span style="color: green;">🟢 Tidak Ada</span>) berdasarkan jenis pelanggaran.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-download" style="color: #2a5298;"></i> Export Results</h3>
+                    <p>Hasil analisis dapat didownload dalam format <strong>JPG</strong> atau <strong>PDF</strong> sebagai laporan.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-palette" style="color: #2a5298;"></i> Modern UI</h3>
+                    <p>Interface modern dengan <strong>custom CSS</strong> styling dan responsif untuk berbagai ukuran layar.</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Kode Utama Aplikasi</h3>
+
+            <h4 style="margin: 20px 0 10px 0; color: #2a5298;">1. Konfigurasi Halaman</h4>
+            <div class="code-block"><span class="keyword">import</span> streamlit <span class="keyword">as</span> st
+
+<span class="comment"># Set page configuration</span>
+st.<span class="function">set_page_config</span>(
+    page_title=<span class="string">"Soccer Fouls Analyzer"</span>,
+    page_icon=<span class="string">"⚽"</span>,
+    layout=<span class="string">"wide"</span>,
+    initial_sidebar_state=<span class="string">"expanded"</span>,
+)</div>
+
+            <h4 style="margin: 20px 0 10px 0; color: #2a5298;">2. Load Model dengan Caching</h4>
+            <div class="code-block"><span class="comment"># Cache TensorFlow model loading</span>
+@st.<span class="function">cache_resource</span>
+<span class="keyword">def</span> <span class="function">load_keras_model</span>():
+    <span class="keyword">try</span>:
+        model = <span class="function">load_model</span>(<span class="string">"fould-classification-resnet101v2.h5"</span>, 
+                           compile=<span class="keyword">False</span>)
+        <span class="keyword">return</span> model
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        st.<span class="function">error</span>(<span class="string">f"Failed to load model: {e}"</span>)
+        <span class="keyword">return</span> <span class="keyword">None</span>
+
+<span class="comment"># Cache PyTorch model loading</span>
+@st.<span class="function">cache_resource</span>
+<span class="keyword">def</span> <span class="function">load_pytorch_model</span>():
+    device = torch.<span class="function">device</span>(<span class="string">"cuda"</span> <span class="keyword">if</span> torch.cuda.<span class="function">is_available</span>() <span class="keyword">else</span> <span class="string">"cpu"</span>)
+    model = timm.<span class="function">create_model</span>(<span class="string">'mobilenetv4_conv_small.e2400_r224_in1k'</span>, 
+                               pretrained=<span class="keyword">False</span>, num_classes=<span class="number">5</span>)
+    model.<span class="function">load_state_dict</span>(torch.<span class="function">load</span>(<span class="string">"fould-classification-mobilenetv4-full.pth"</span>, 
+                                      map_location=device))
+    model.<span class="function">eval</span>()
+    <span class="keyword">return</span> model, device</div>
+
+            <h4 style="margin: 20px 0 10px 0; color: #2a5298;">3. Preprocessing Image</h4>
+            <div class="code-block"><span class="keyword">def</span> <span class="function">preprocess_image_tensorflow</span>(img_data):
+    img = Image.<span class="function">open</span>(io.<span class="function">BytesIO</span>(img_data))
+    img = img.<span class="function">resize</span>((<span class="number">224</span>, <span class="number">224</span>))
+    img_array = np.<span class="function">array</span>(img)
+    
+    <span class="comment"># Handle different channel formats</span>
+    <span class="keyword">if</span> <span class="function">len</span>(img_array.shape) < <span class="number">3</span>:
+        img_array = np.<span class="function">stack</span>((img_array,) * <span class="number">3</span>, axis=-<span class="number">1</span>)
+    <span class="keyword">elif</span> img_array.shape[<span class="number">2</span>] == <span class="number">4</span>:  <span class="comment"># RGBA</span>
+        img_array = img_array[:, :, :<span class="number">3</span>]
+    
+    img_array = np.<span class="function">expand_dims</span>(img_array, axis=<span class="number">0</span>)
+    img_array = img_array / <span class="number">255.0</span>  <span class="comment"># Normalisasi</span>
+    <span class="keyword">return</span> img_array, img
+
+<span class="keyword">def</span> <span class="function">preprocess_image_pytorch</span>(img_data, device):
+    transform = transforms.<span class="function">Compose</span>([
+        transforms.<span class="function">Resize</span>((<span class="number">224</span>, <span class="number">224</span>)),
+        transforms.<span class="function">ToTensor</span>(),
+        transforms.<span class="function">Normalize</span>([<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>], 
+                             [<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>]),
+    ])
+    img = Image.<span class="function">open</span>(io.<span class="function">BytesIO</span>(img_data)).<span class="function">convert</span>(<span class="string">"RGB"</span>)
+    <span class="keyword">return</span> <span class="function">transform</span>(img).<span class="function">unsqueeze</span>(<span class="number">0</span>).<span class="function">to</span>(device), img</div>
+
+            <h4 style="margin: 20px 0 10px 0; color: #2a5298;">4. Fungsi Prediksi</h4>
+            <div class="code-block">LABELS = [
+    <span class="string">"Handball Sengaja"</span>,
+    <span class="string">"Handball Tidak Sengaja"</span>,
+    <span class="string">"Tackle Bersih"</span>,
+    <span class="string">"Tackle Keras"</span>,
+    <span class="string">"Tackle Ringan"</span>
+]
+
+<span class="keyword">def</span> <span class="function">predict_tackle</span>(image_data, model_type=<span class="string">"tensorflow"</span>):
+    <span class="keyword">if</span> model_type == <span class="string">"tensorflow"</span>:
+        model = <span class="function">load_keras_model</span>()
+        img_array, _ = <span class="function">preprocess_image_tensorflow</span>(image_data)
+        result = model.<span class="function">predict</span>(img_array)
+        predicted_idx = np.<span class="function">argmax</span>(result)
+        confidence = <span class="function">float</span>(np.<span class="function">max</span>(result))
+    <span class="keyword">else</span>:  <span class="comment"># pytorch</span>
+        model, device = <span class="function">load_pytorch_model</span>()
+        input_tensor, _ = <span class="function">preprocess_image_pytorch</span>(image_data, device)
+        <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+            outputs = <span class="function">model</span>(input_tensor)
+            probs = F.<span class="function">softmax</span>(outputs, dim=<span class="number">1</span>).cpu().<span class="function">numpy</span>()[<span class="number">0</span>]
+        predicted_idx = np.<span class="function">argmax</span>(probs)
+        confidence = <span class="function">float</span>(probs[predicted_idx])
+    
+    <span class="keyword">return</span> LABELS[predicted_idx], confidence</div>
+
+            <h4 style="margin: 20px 0 10px 0; color: #2a5298;">5. Mapping Kartu</h4>
+            <div class="code-block"><span class="keyword">def</span> <span class="function">map_card</span>(predicted_class, confidence):
+    <span class="keyword">if</span> predicted_class == <span class="string">"Handball Sengaja"</span>:
+        <span class="keyword">return</span> <span class="string">"Kartu Merah"</span>, <span class="string">"card-red"</span>, <span class="string">"🟥"</span>
+    <span class="keyword">elif</span> predicted_class == <span class="string">"Handball Tidak Sengaja"</span>:
+        <span class="keyword">return</span> <span class="string">"Kartu Kuning"</span>, <span class="string">"card-yellow"</span>, <span class="string">"🟨"</span>
+    <span class="keyword">elif</span> predicted_class == <span class="string">"Tackle Bersih"</span>:
+        <span class="keyword">return</span> <span class="string">"Tidak Kartu"</span>, <span class="string">"card-none"</span>, <span class="string">"🟢"</span>
+    <span class="keyword">elif</span> predicted_class == <span class="string">"Tackle Keras"</span>:
+        <span class="keyword">return</span> <span class="string">"Kartu Merah"</span>, <span class="string">"card-red"</span>, <span class="string">"🟥"</span>
+    <span class="keyword">elif</span> predicted_class == <span class="string">"Tackle Ringan"</span>:
+        <span class="keyword">return</span> <span class="string">"Kartu Kuning"</span>, <span class="string">"card-yellow"</span>, <span class="string">"🟨"</span>
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="string">"Tidak Kartu"</span>, <span class="string">"card-none"</span>, <span class="string">"🟢"</span></div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Menjalankan Aplikasi</h3>
+
+            <div class="info-box success">
+                <h4><i class="fas fa-terminal"></i> Command untuk Menjalankan</h4>
+                <div class="code-block" style="margin: 10px 0 0 0;"><span class="comment"># Pastikan semua dependency terinstall</span>
+pip install streamlit tensorflow torch torchvision timm pillow matplotlib reportlab
+
+<span class="comment"># Jalankan aplikasi Streamlit</span>
+streamlit run app.py</div>
+            </div>
+        </section>
+
+        <!-- Section 8: Cara Penggunaan -->
+        <section id="penggunaan" class="section">
+            <div class="section-header">
+                <i class="fas fa-play-circle"></i>
+                <h2>8. Cara Penggunaan Aplikasi</h2>
+            </div>
+
+            <p>
+                Berikut adalah panduan langkah demi langkah untuk menggunakan aplikasi Soccer Fouls Analyzer:
+            </p>
+
+            <ul class="step-list">
+                <li>
+                    <h4>Buka Aplikasi</h4>
+                    <p>Jalankan command <code>streamlit run app.py</code> di terminal. Browser akan otomatis terbuka menampilkan aplikasi di <code>http://localhost:8501</code></p>
+                </li>
+                <li>
+                    <h4>Pilih Model AI</h4>
+                    <p>Pilih model yang ingin digunakan dari dropdown:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>ResNet101V2 (TensorFlow/Keras)</strong> - Akurasi tinggi, lebih besar</li>
+                        <li><strong>MobileNetV4 (PyTorch)</strong> - Lebih ringan, inference cepat</li>
+                    </ul>
+                </li>
+                <li>
+                    <h4>Upload Gambar</h4>
+                    <p>Klik tombol "Browse files" atau drag & drop gambar tackle sepak bola. Format yang didukung: <strong>JPG, JPEG, PNG</strong></p>
+                </li>
+                <li>
+                    <h4>Tunggu Proses Analisis</h4>
+                    <p>Sistem akan memproses gambar dan menampilkan loading spinner. Proses ini biasanya memakan waktu 1-3 detik.</p>
+                </li>
+                <li>
+                    <h4>Lihat Hasil Prediksi</h4>
+                    <p>Hasil akan ditampilkan berupa:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Jenis Pelanggaran</strong> - Kategori tackle yang terdeteksi</li>
+                        <li><strong>Confidence Score</strong> - Tingkat keyakinan prediksi (0-100%)</li>
+                        <li><strong>Rekomendasi Kartu</strong> - Kartu yang mungkin diberikan wasit</li>
+                    </ul>
+                </li>
+                <li>
+                    <h4>Download Laporan</h4>
+                    <p>Pilih format download (JPG atau PDF) dan klik tombol download untuk menyimpan hasil analisis.</p>
+                </li>
+            </ul>
+
+            <h3 style="margin: 30px 0 15px 0; color: #1e3c72;">Tampilan Hasil Prediksi</h3>
+
+            <div class="card-grid">
+                <div class="card" style="border-left-color: #4caf50;">
+                    <h3>🟢 Tackle Bersih</h3>
+                    <p>Tackle yang dilakukan dengan benar dan tidak membahayakan. <strong>Tidak ada kartu</strong> yang diberikan.</p>
+                    <div style="background: #e8f5e9; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                        <small>Pesan: "Ini adalah tackle bersih sesuai aturan permainan."</small>
+                    </div>
+                </div>
+                <div class="card" style="border-left-color: #ffc107;">
+                    <h3>🟨 Pelanggaran Ringan</h3>
+                    <p>Tackle ringan atau handball tidak sengaja. Kemungkinan mendapat <strong>kartu kuning</strong>.</p>
+                    <div style="background: #fff3e0; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                        <small>Pesan: "Tackle ringan/Handball tidak sengaja, kemungkinan kartu kuning."</small>
+                    </div>
+                </div>
+                <div class="card" style="border-left-color: #f44336;">
+                    <h3>🟥 Pelanggaran Berat</h3>
+                    <p>Tackle keras atau handball sengaja. Berpotensi mendapat <strong>kartu merah</strong>.</p>
+                    <div style="background: #ffebee; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                        <small>Pesan: "Tackle keras/Handball disengaja, berpotensi kartu merah."</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 9: Kesimpulan -->
+        <section id="kesimpulan" class="section">
+            <div class="section-header">
+                <i class="fas fa-check-circle"></i>
+                <h2>9. Kesimpulan</h2>
+            </div>
+
+            <p>
+                Project <strong>Soccer Fouls Analyzer</strong> berhasil mengimplementasikan sistem klasifikasi pelanggaran 
+                sepak bola berbasis deep learning dengan hasil yang memuaskan. Berikut adalah ringkasan dari keseluruhan project:
+            </p>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Ringkasan Project</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspek</th>
+                            <th>Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Tujuan</strong></td>
+                            <td>Klasifikasi otomatis pelanggaran sepak bola untuk membantu keputusan wasit</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jumlah Kelas</strong></td>
+                            <td>5 kelas (Handball Sengaja, Handball Tidak Sengaja, Tackle Bersih, Tackle Keras, Tackle Ringan)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Arsitektur Model</strong></td>
+                            <td>ResNet101V2 (TensorFlow) dan MobileNetV4 (PyTorch) dengan Transfer Learning</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dataset Split</strong></td>
+                            <td>90% Training, 5% Validation, 5% Test</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Augmentasi</strong></td>
+                            <td>Rotation, Shear, Zoom, Brightness, Shift, Horizontal Flip</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Deployment</strong></td>
+                            <td>Web application menggunakan Streamlit framework</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Output</strong></td>
+                            <td>Prediksi kelas, confidence score, rekomendasi kartu, report JPG/PDF</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Keunggulan Sistem</h3>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3><i class="fas fa-bolt" style="color: #ff9800;"></i> Cepat & Efisien</h3>
+                    <p>Prediksi dilakukan dalam hitungan detik, memungkinkan analisis real-time saat pertandingan.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-bullseye" style="color: #4caf50;"></i> Akurat</h3>
+                    <p>Model dilatih dengan dataset berkualitas dan teknik transfer learning untuk hasil optimal.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-user-friends" style="color: #2196f3;"></i> User-Friendly</h3>
+                    <p>Interface web yang intuitif dan mudah digunakan tanpa perlu pengetahuan teknis.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-file-export" style="color: #9c27b0;"></i> Export Report</h3>
+                    <p>Hasil analisis dapat diexport sebagai laporan untuk dokumentasi dan review.</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">Pengembangan Selanjutnya</h3>
+
+            <div class="info-box">
+                <h4><i class="fas fa-road"></i> Roadmap</h4>
+                <ul>
+                    <li>Meningkatkan jumlah dan variasi dataset untuk akurasi lebih tinggi</li>
+                    <li>Implementasi analisis video real-time</li>
+                    <li>Integrasi dengan sistem VAR (Video Assistant Referee)</li>
+                    <li>Mobile application untuk kemudahan akses di lapangan</li>
+                    <li>Fine-tuning model dengan lebih banyak epoch dan hyperparameter optimization</li>
+                </ul>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: #1e3c72;">File yang Dihasilkan</h3>
+
+            <div class="code-block"><span class="comment"># Struktur file project</span>
+klasifikasi-pelanggaran-sepak-bola/
+├── app.py                                    <span class="comment"># Aplikasi Streamlit</span>
+├── Resnet101V2.ipynb                         <span class="comment"># Notebook training ResNet</span>
+├── MobileNetV2.ipynb                         <span class="comment"># Notebook training MobileNetV2</span>
+├── MobileNetV4.ipynb                         <span class="comment"># Notebook training MobileNetV4</span>
+├── fould-classification-resnet101v2.h5       <span class="comment"># Model ResNet101V2 (H5)</span>
+├── fould-classification-resnet101v2.keras    <span class="comment"># Model ResNet101V2 (Keras)</span>
+├── fould-classification-mobilenetv4.pth      <span class="comment"># Model MobileNetV4 (PyTorch)</span>
+├── fould-classification-mobilenetv4-full.pth <span class="comment"># Model MobileNetV4 Full</span>
+├── VAR/                                      <span class="comment"># Dataset original</span>
+│   ├── Handball Sengaja/
+│   ├── Handball Tidak Sengaja/
+│   ├── Tackle Bersih/
+│   ├── Tackle Keras/
+│   └── Tackle Ringan/
+└── splitted_dataset/                         <span class="comment"># Dataset yang sudah di-split</span>
+    ├── train/
+    ├── val/
+    └── test/</div>
+        </section>
+
+        <!-- Section 10: Dependencies -->
+        <section class="section">
+            <div class="section-header">
+                <i class="fas fa-cube"></i>
+                <h2>10. Dependencies & Requirements</h2>
+            </div>
+
+            <p>Berikut adalah daftar library dan package yang dibutuhkan untuk menjalankan project ini:</p>
+
+            <div class="code-block"><span class="comment"># requirements.txt</span>
+
+<span class="comment"># Deep Learning Frameworks</span>
+tensorflow>=2.10.0
+torch>=2.0.0
+torchvision>=0.15.0
+timm>=0.9.0
+
+<span class="comment"># Web Framework</span>
+streamlit>=1.28.0
+
+<span class="comment"># Image Processing</span>
+pillow>=9.0.0
+opencv-python>=4.7.0
+
+<span class="comment"># Data Processing & Visualization</span>
+numpy>=1.23.0
+pandas>=1.5.0
+matplotlib>=3.6.0
+seaborn>=0.12.0
+
+<span class="comment"># Machine Learning</span>
+scikit-learn>=1.2.0
+
+<span class="comment"># PDF Generation</span>
+reportlab>=4.0.0</div>
+
+            <div class="info-box success">
+                <h4><i class="fas fa-download"></i> Instalasi Dependencies</h4>
+                <div class="code-block" style="margin: 10px 0 0 0;"><span class="comment"># Install semua dependencies sekaligus</span>
+pip install tensorflow torch torchvision timm streamlit pillow numpy pandas matplotlib seaborn scikit-learn reportlab</div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h3 style="margin-bottom: 15px;">⚽ Soccer Fouls Analyzer</h3>
+        <p>Sistem Klasifikasi Pelanggaran Sepak Bola Berbasis Deep Learning</p>
+        <p style="margin-top: 20px; opacity: 0.7;">© 2025 - Sendy Prismana Nurferian</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

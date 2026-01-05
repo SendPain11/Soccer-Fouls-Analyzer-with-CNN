@@ -1,0 +1,10 @@
+streamlit
+tensorflow
+numpy
+Pillow
+matplotlib
+reportlab
+torch
+torchvision
+timm
+gdown
