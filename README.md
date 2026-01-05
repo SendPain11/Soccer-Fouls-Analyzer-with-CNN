@@ -7,9 +7,9 @@
 
 ### 👤 Author
 **Sendy Prismana Nurferian**  
-NRP: **5024211012**
-Email: **sendyprisma02@gmail.com**
-LinkedIn: **https://www.linkedin.com/in/sendy-prismana-nurferian-95a27b213**
+- NRP: **5024211012**
+- Email: **sendyprisma02@gmail.com**
+- LinkedIn: **https://www.linkedin.com/in/sendy-prismana-nurferian-95a27b213**
 
 ---
 
