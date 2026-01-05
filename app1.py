@@ -165,8 +165,8 @@ LABELS = [
 
 # Google Drive file IDs for models
 # GANTI DENGAN FILE ID ANDA!
-RESNET_MODEL_ID = "YOUR_RESNET_FILE_ID_HERE"  # Ganti dengan ID Google Drive untuk ResNet
-MOBILENET_MODEL_ID = "YOUR_MOBILENET_FILE_ID_HERE"  # Ganti dengan ID Google Drive untuk MobileNet
+RESNET_MODEL_ID = "1MbnH_e4UN5y0H_ahQsaXlmYPiZnisuxB"  # Ganti dengan ID Google Drive untuk ResNet
+MOBILENET_MODEL_ID = "11Sj-Mg-np7Vr1nE4uAY-0Ku8TnGLwmzu"  # Ganti dengan ID Google Drive untuk MobileNet
 
 def download_model_from_gdrive(file_id, output_path):
     """Download model dari Google Drive jika belum ada"""
